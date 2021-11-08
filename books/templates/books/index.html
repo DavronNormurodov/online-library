@@ -1,0 +1,71 @@
+{% extends 'books/base.html' %} 
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <form class="card card-sm">
+                <div class="card-body row no-gutters align-items-center">
+                    <div class="col">
+                        <input type="search" name="book_name" placeholder="search for books" class="form-control form-controll-borderless">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-success" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+    {% for product in product_objects %}
+        <div class="col-md-4">
+            <div class="card mb-2">
+                <img height="300px" class="card-img-top" src="{{ product.image }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">Author: {{ product.author }}</p>
+                    <p class="card-text">Available {{ product.count }}</p>
+                    <p class="card-text">{{ product.writtentime }}</p>
+                    <a href="{{ product.id }}" class="btn btn-success">View</a>
+                    {% if product.user != null and user in product.user.all %}
+                        <button id="card" class="btn atc btn-warning">rented</button>
+                    {% else %}
+                        {% if product.count != 0 %}
+                            <form class="d-inline-block" action="{% url 'detail' product.id  %}" method="POST">
+                                {% csrf_token %}
+                                <button id="card" class="btn atc btn-warning" type="submit">rent</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+              </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 offset-md-4">
+            <ul class="pagination">
+                {% if product_objects.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ product_objects.previous_page_number }}">Previous</a>
+                </li>
+                <!-- sep -->
+                {% endif %}
+                <!-- sep -->
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ product_objects.number }}">Current</a>
+                </li>
+                {% if product_objects.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ product_objects.next_page_number }}">Next</a>
+                </li>
+                <!-- sep -->
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
