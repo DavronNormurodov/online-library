@@ -1,0 +1,29 @@
+{% extends 'books/base.html' %} 
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-2">
+                <img height="300px" class="card-img-top" src="{{ product_object.image }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ product_object.name }}</h5>
+                    <p class="card-text">Author: {{ product_object.author }}</p>
+                    <p class="card-text">Available {{ product_object.count }}</p>
+                    <p class="card-text">{{ product_object.writtentime }}</p>
+                    {% if product_object.user != null and user in product_object.user.all %}
+                        <button id="card" class="btn atc btn-warning">rented</button>
+                    {% else %}
+                        {% if product_object.count != 0 %}
+                            <form action="{% url 'detail' product_object.id  %}" method="POST">
+                                {% csrf_token %}
+                                <button id="card" class="btn atc btn-warning" type="submit">rent</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

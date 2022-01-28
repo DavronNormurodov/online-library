@@ -1,0 +1,44 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 m-auto pb-5">
+            <h1 class="display-4 text-center">Log In</h1>
+            {% if form.errors %}
+                {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {% if field.name == 'password' %}
+                            <input type="password" class="form-control form-control-lg" placeholder="password" name="{{ field.name }}" value>
+                        {% else %}
+                            <input type="text" class="form-control form-control-lg" placeholder="{{ field.name }}" name="{{ field.name }}" value>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-info btn-block mt-4">
+            </form>
+            <div class="text-center mt-4">
+                Do you not have account yet?
+                <a href="{% url 'signup' %}" class="btn btn-outline-primary">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

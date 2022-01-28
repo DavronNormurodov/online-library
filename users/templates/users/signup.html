@@ -1,0 +1,49 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+      <div class="col-md-6 m-auto pb-5">
+          <h1 class="display-4 text-center">Sign Up</h1>
+          {% if form.errors %}
+            {% for field in form %}
+              {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+          {% endif %}
+          <form method="POST">
+              {% csrf_token %}
+              {% for field in form %}
+                  <div class="form-group">
+                    {% if field.name == 'username' %}
+                      <input type="text" class="form-control form-control-lg" placeholder="{{ field.name }}" name="{{ field.name }}" value>
+                    {% elif field.name == 'email' %}  
+                      <input type="email" class="form-control form-control-lg" placeholder="{{ field.name }}" name="{{ field.name }}" value>
+                    {% elif field.name == 'password1' %}
+                      <input type="password" class="form-control form-control-lg" placeholder="password" name="{{ field.name }}" value>
+                    {% elif field.name == 'password2' %}
+                      <input type="password" class="form-control form-control-lg" placeholder="confirm password" name="{{ field.name }}" value>
+                    {% endif %}
+                  </div>
+              {% endfor %}
+              <input type="submit" class="btn btn-info btn-block mt-4">
+          </form>
+          <div class="text-center mt-4">
+              Do you already have a account?
+              <a href="{% url 'login' %}" class="btn btn-outline-primary">Log In</a>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}
+
